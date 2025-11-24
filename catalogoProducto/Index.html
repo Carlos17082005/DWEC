@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogo Producto</title>
+    <style>
+        .oculto { visibility: hidden; }
+        span { color: red; }
+    </style>
+</head>
+<body>
+    <button type="button" id="Añadir">Añadir producto</button>
+    <br><br>
+    <form id="formularioAñadir" class="oculto">  
+        <label for="id">Id: </label>
+        <input type="number" id="id" min="0" name="id"> <span id="idError"></span>
+        <br><br>
+        <label for="name">Nombre del producto: </label>
+        <input type="text" id="name" name="name"> <span id="nameError"></span>
+        <br><br>
+        <label for="desc">Descripcion breve: </label>
+        <textarea id="desc" name="desc"></textarea>
+        <br><br>
+        <label for="precio">Precio: </label>
+        <input type="number" id="precio" name="precio"> <span id="precioError"></span>
+        <br><br>
+        <label for="imagen">Selecciona una imagen:</label>
+        <input type="file" id="imagen" name="imagen" accept="image/*"><br><br> <span id="imagenError"></span>
+
+        <button type="submit" id="añadirProducto">Añadir</button>
+    </form>
+</body>
+<script>
+    class producto  {
+        constructor(id, name, desc, precio, imagen)  {
+            this.id = id
+            this.name = name
+            this.desc = desc
+            this.precio = precio
+            this.imagen = imagen
+        }
+        toString()  {
+            return `${this.id}:${this.name}:${this.desc}:${this.precio}:${this.imagen}`
+        }
+    }
+
+    const productos = [] 
+
+    const A = document.getElementById('Añadir')
+    const FA = document.getElementById('formularioAñadir')
+
+    A.addEventListener('click', function()  {
+        FA.style.visibility = 'visible';
+    })
+
+    FA.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('id')
+        const name = document.getElementById('name')
+        const desc = document.getElementById('desc')
+        const precio = document.getElementById('precio')
+        const imagen = document.getElementById('imagen')
+        let bool = true
+
+        const objetoEncontrado = productos.findIndex(producto => producto.id == id.value)
+        if (id.value == '' || objetoEncontrado != -1)  {
+            let span = document.getElementById('idError')
+            span.textContent = "ID repetido"
+            id.style.backgroundColor = 'red'
+            bool = false
+        }
+        else  {
+            let span = document.getElementById('idError')
+            span.textContent = ""
+            id.style.backgroundColor = 'transparent'
+        }
+        if (name.value == '')  {
+            let span = document.getElementById('nameError')
+            span.textContent = "Este campo es obligatorio"
+            name.style.backgroundColor = 'red'
+            bool = false
+        }
+        else  {
+            let span = document.getElementById('nameError')
+            span.textContent = ""
+            name.style.backgroundColor = 'transparent'
+        }
+        if (precio.value < 0)  {
+            let span = document.getElementById('precioError')
+            span.textContent = "El precio tiene que ser numerico positivo"
+            precio.style.backgroundColor = 'red'
+            bool = false
+        }
+        else  {
+            let span = document.getElementById('precioError')
+            span.textContent = ""
+            precio.style.backgroundColor = 'transparent'
+        }
+        if (imagen.value == '')  {
+            let span = document.getElementById('imagenError')
+            span.textContent = "Este campo es obligatorio"
+            imagen.style.backgroundColor = 'red'
+            bool = false
+        }
+        else  {
+            let span = document.getElementById('imagenError')
+            span.textContent = ""
+            imagen.style.backgroundColor = 'transparent'
+        }
+        if (bool)  {
+            productos.push(new producto(id.value, name.value, desc.value, precio.value, imagen.value))
+            FA.reset()
+        }
+        
+        
+    })
+    
+</script>
+</html>

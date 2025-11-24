@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="elemento" style="background-color: aqua; width: 200px; height: 200px; border: 5px solid black;"></div>
+</body>
+<script>
+    const elemento = document.getElementById('elemento')
+    elemento.addEventListener('click', function()  {
+        elemento.style.width = '100px';
+        elemento.style.height = '100px';
+    })
+    elemento.addEventListener('contextmenu', function()  {
+        event.preventDefault();
+        elemento.style.display = 'none';
+    })
+</script>
+</html>
