@@ -1,0 +1,74 @@
+span { color: red; }  /* Mensajes de error en color rojo */
+
+.form_oculto {  /* Formulario permanece oculto hasta que le des al boton */
+    width: 100%;
+    visibility: hidden;
+    /* Animacion */
+    opacity: 0;
+    transform: translateY(-20px);  /* Despaza desde mas arriba para dar la sensacion de desplazamiento */
+    transition: opacity .5s ease, transform .5s ease, visibility .5s;
+}
+
+.form_oculto.visible {  /* Animacion de aparicion del formulario */
+    /* Animacion */
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.productos {  /* Contenedor de los productos */
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));  /* Los organiza automaticamente en columnas */
+    gap: 20px;
+}
+
+.card {  /* Productos */
+    width: 250px; 
+    display: flex; 
+    flex-direction: column;
+    /* Animacion */
+    transition: all .5s ease;
+}
+
+.card-top {  /* Mantine el nombre oculto */
+    height: 250px; 
+    position: relative; 
+    overflow: hidden; 
+}
+
+.img_producto {  /* Permite ver la imagen */
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    /* Animacion *//* Transicion entre imagen y nombre */
+    opacity: 1; 
+    transform: scale(1);
+    transition: opacity .5s ease, transform .5s ease;
+}
+
+.producto_oculto {  /* Nombre del producto */
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    text-align: center;
+    padding-top: 100px;
+    /* Animacion *//* Transicion entre imagen y nombre */
+    opacity: 0;
+    transform: scale(1.1);
+    transition: opacity .5s ease, transform .5s ease;
+}
+
+.detalles_producto {  /* Detalles del producto */
+    padding: 10px;
+    display: none;
+    /* Animacion */
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity .25s ease, transform .25s ease; 
+}
+
+.detalles_producto.activo {  /* Detalles del producto cuando esta dezplegado */
+    /* Animacion */
+    opacity: 1;
+    transform: translateY(0);
+}
