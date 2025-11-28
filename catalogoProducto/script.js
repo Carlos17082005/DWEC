@@ -33,47 +33,31 @@ FA.addEventListener('submit', (e) => {  // Listener del boton "añadir" para com
 
     const objetoEncontrado = productos.findIndex(producto => producto.id == id.value)
     if (objetoEncontrado != -1)  {  // El objeto existe
-        document.getElementById('idError').textContent = "El ID del producto debe ser unico, no se puede repetir"  // Mesaje de ERROR
-        id.style.backgroundColor = 'red'
-        bool = false  // Evita que se cree el objeto
+        bool = error(id, 'idError', "El ID del producto debe ser unico, no se puede repetir")
     } else if (id.value == '')  {
-        document.getElementById('idError').textContent = "Este campo es obligatorio"  // Mesaje de ERROR
-        id.style.backgroundColor = 'red'
-        bool = false  // Evita que se cree el objeto
+        bool = error(id, 'idError', "Este campo es obligatorio")
     } else {
-        document.getElementById('idError').textContent = ""  // Eliminar el mensaje de error si el valor es correcto
-        id.style.backgroundColor = 'transparent'
+        limpiar(id, 'idError') 
     }
-
+    
     if (name.value == '')  {
-        document.getElementById('nameError').textContent = "Este campo es obligatorio"  // Mesaje de ERROR
-        name.style.backgroundColor = 'red'
-        bool = false  // Evita que se cree el objeto
+        bool = error(name, 'nameError', "Este campo es obligatorio")
     } else {
-        document.getElementById('nameError').textContent = ""  // Eliminar el mensaje de error si el valor es correcto
-        name.style.backgroundColor = 'transparent'
+        limpiar(name, 'nameError') 
     }
 
     if (precio.value == '')  {
-        document.getElementById('precioError').textContent = "Este campo es obligatorio"  // Mesaje de ERROR
-        precio.style.backgroundColor = 'red'
-        bool = false  // Evita que se cree el objeto
+        bool = error(precio, 'precioError', "Este campo es obligatorio")
     } else if (precio.value < 0)  {
-        document.getElementById('precioError').textContent = "Debe ser un numero positivo"  // Mesaje de ERROR
-        precio.style.backgroundColor = 'red'
-        bool = false  // Evita que se cree el objeto
+        bool = error(precio, 'precioError', "Debe ser un numero positivo")
     } else {
-        document.getElementById('precioError').textContent = ""  // Eliminar el mensaje de error si el valor es correcto
-        precio.style.backgroundColor = 'transparent'
+        limpiar(precio, 'precioError') 
     }
 
     if (imagen.files.length === 0)  {
-        document.getElementById('imagenError').textContent = "Este campo es obligatorio"  // Mesaje de ERROR
-        imagen.style.backgroundColor = 'red'
-        bool = false  // Evita que se cree el objeto
+        bool = error(imagen, 'imagenError', "Este campo es obligatorio")
     } else {
-        document.getElementById('imagenError').textContent = ""  // Eliminar el mensaje de error si el valor es correcto
-        imagen.style.backgroundColor = 'transparent'
+        limpiar(imagen, 'imagenError') 
     }
 
     if (bool) {  // Si NO hay errores se crea el objeto, se guarda en el array y se crea la tarjeta
@@ -182,6 +166,17 @@ function crearTarjetas(producto) {  // Crea la tarjeta de los productos
     })
 
     contador_de_productos(productos)  // Imprime el total de productos
+}
+
+function error(campo, span, mensaje)  {
+    document.getElementById(span).textContent = mensaje  // Mesaje de ERROR
+    campo.style.backgroundColor = 'red'
+    return false 
+}
+
+function limpiar(campo, span)  {
+    document.getElementById(span).textContent = ""  // Eliminar el mensaje de error si el valor es correcto
+    campo.style.backgroundColor = 'transparent'
 }
 
 function contador_de_productos(productos)  {  // Cuenta e imprime el total de productos
