@@ -16,13 +16,14 @@ class producto {  // Objeto producto: guarda todos los datos del producto
 
 const productos = []  // Array con todos los productos
 
+// *** MODIFICADO *** Obtener el botón con el id nuevo
 const A = document.getElementById('Añadir')  
 A.addEventListener('click', () => {  // Listener del boton "añadir producto" para desplegar el formulario
     FA.classList.add("visible")
 })
 
 const FA = document.getElementById('formularioAñadir')
-FA.addEventListener('submit', (e) => {  // Listener del boton "añadir" para comprobar los datos y guardarlos
+FA.addEventListener('submit', async (e) => { 
     e.preventDefault()  // Evita que se recarge la pagina
     const id = document.getElementById('id')
     const name = document.getElementById('name')
@@ -30,6 +31,9 @@ FA.addEventListener('submit', (e) => {  // Listener del boton "añadir" para com
     const precio = document.getElementById('precio')
     const imagen = document.getElementById('imagen')
     let bool = true  // Se asegura que se comprueben todos los campos y si hay uno solo incorrecto no se crea el objeto
+
+    const boton = document.getElementById('añadirProducto')
+    const mensaje = document.getElementById('mensaje')
 
     const objetoEncontrado = productos.findIndex(producto => producto.id == id.value)
     if (objetoEncontrado != -1)  {  // El objeto existe
@@ -60,14 +64,41 @@ FA.addEventListener('submit', (e) => {  // Listener del boton "añadir" para com
         limpiar(imagen, 'imagenError') 
     }
 
-    if (bool) {  // Si NO hay errores se crea el objeto, se guarda en el array y se crea la tarjeta
-        const imageURL = URL.createObjectURL(imagen.files[0])  // De esta forma peermite usar la imagen subida por el usuario
-        const p = new producto(id.value, name.value, desc.value, precio.value, imageURL)
-        productos.push(p)
+    if (!bool) return  // Si hay fallos se sale 
 
-        crearTarjetas(p)
-        FA.reset()  // Vacia el formulario
+    boton.disabled = true 
+    mensaje.style.color = 'black'
+    mensaje.textContent = "Guardando..." 
+
+    const imageURL = URL.createObjectURL(imagen.files[0]) 
+
+    try {
+        await validarImagen(imageURL)
+    } catch (err) {  // Imagen no funciona
+        error(imagen, 'imagenError', "La imagen no se puede cargar o está corrupta")
+        boton.disabled = false
+        boton.textContent = 'Añadir'
+        return
     }
+
+    const p = new producto(id.value, name.value, desc.value, precio.value, imageURL)
+    API.guardarProducto(p)
+        .then(res => {
+            productos.push(p)
+            crearTarjetas(p)
+            FA.reset()  // Vacia el formulario
+            mensaje.style.color = 'green'
+            mensaje.textContent = "Producto guardado correctamente"
+        })
+        .catch(err => {
+            error(id, 'idError', err)
+            mensaje.style.color = 'red'
+            mensaje.textContent = "Error" 
+        })
+        .finally(() => {
+            boton.disabled = false
+            contador_de_productos(productos)
+        })
 })
 
 const contenedor = document.getElementById('productos')
@@ -109,8 +140,12 @@ contenedor.addEventListener('click', (e) => {  // Al hacer click sale la descrip
     const productoEncontrado = productos.find(p => p.id == id)  // Busca el producto
 
     const detalles = card.querySelector('.detalles_producto')
-    detalles.innerHTML = productoEncontrado.toString()  // Inserta los detalles con la funcion toString()
-
+    if (productoEncontrado) { 
+        detalles.innerHTML = productoEncontrado.toString() 
+    } else { 
+        detalles.innerHTML = "Información no disponible" 
+    } 
+    
     if (detalles.style.display == 'block') {
         detalles.classList.remove('activo')
         setTimeout(() => detalles.style.display = 'none', 250)  // Espera hasta que acabe la animacion para ocultar los detallees
@@ -120,25 +155,34 @@ contenedor.addEventListener('click', (e) => {  // Al hacer click sale la descrip
     }
 })
 
-contenedor.addEventListener('contextmenu', (e) => {  // Al hacer click deerecho se elimina el objeto
+contenedor.addEventListener('contextmenu', async (e) => {  // Al hacer click derecho se elimina el objeto
     e.preventDefault()  // Evita que salga el contexmenu
 
-    const card = e.target.closest('.card')  // Busca el objeto con classe .card dentro del contenedor que cumpla el requisito
-    if (!card) return  // Si esta en el contenedor pero no en una tarjeta se sale de la funcion
+    const card = e.target.closest('.card')
+    if (!card) return
 
     const id = card.dataset.id
-    const productoEncontrado = productos.findIndex(p => p.id == id)  // Busca el producto por su id
+    const productoEncontrado = productos.findIndex(p => p.id == id)
 
-    productos.splice(productoEncontrado, 1)  // Lo elimina del array
+    card.classList.add('eliminando')
 
-    // Animacion de desaparicion
-    card.style.transition = "opacity .3s ease, transform .3s ease"
-    card.style.opacity = "0"
-    card.style.transform = "scale(.9)"
+    try {
+        await API.borrarProducto(id)
 
-    setTimeout(() => { card.remove() }, 300)  // Espera que acabe la animacion y los elimina
+        productos.splice(productoEncontrado, 1)
 
-    contador_de_productos(productos)  // Imprime el total de productos
+        card.style.transition = "opacity .3s ease, transform .3s ease"
+        card.style.opacity = "0"
+        card.style.transform = "scale(.9)"
+
+        setTimeout(() => { card.remove() }, 300)  // Espera que acabe la animacion y los elimina
+        contador_de_productos(productos)  // Imprime el total de productos
+
+    } catch (err) {
+        card.classList.remove('eliminando') 
+
+        alert("No se pudo borrar el producto: " + err)
+    }
 })
 
 function crearTarjetas(producto) {  // Crea la tarjeta de los productos
@@ -183,4 +227,13 @@ function contador_de_productos(productos)  {  // Cuenta e imprime el total de pr
     const contador = document.getElementById('contador')
     const num = productos.length
     contador.innerHTML = `El total de productos es: ${num}`
+}
+
+function validarImagen(url) {
+    return new Promise((resolve, reject) => {
+        const img = new Image()
+        img.onload = () => resolve(true)
+        img.onerror = () => reject(false)
+        img.src = url
+    })
 }

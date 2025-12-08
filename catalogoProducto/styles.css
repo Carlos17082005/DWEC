@@ -1,4 +1,4 @@
-span { color: red; }  /* Mensajes de error en color rojo */
+.error { color: red; }  /* Mensajes de error en color rojo */
 
 .form_oculto {  /* Formulario permanece oculto hasta que le des al boton */
     width: 100%;
@@ -67,8 +67,13 @@ span { color: red; }  /* Mensajes de error en color rojo */
     transition: opacity .25s ease, transform .25s ease; 
 }
 
-.detalles_producto.activo {  /* Detalles del producto cuando esta dezplegado */
+.detalles_producto.activo {  /* Detalles del producto cuando esta desplegado */
     /* Animacion */
     opacity: 1;
     transform: translateY(0);
+}
+
+.card.eliminando img {
+    filter: grayscale(100%) brightness(70%); 
+    transition: filter .3s ease; 
 }
