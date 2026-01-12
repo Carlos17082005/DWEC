@@ -1,43 +1,49 @@
 <!DOCTYPE html> 
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogo Producto</title>
+    <title>Catálogo Producto</title>
     <link rel="stylesheet" href="styles.css">  <!-- Hoja CSS -->
 </head>
 
 <body>
-    <button type="button" id="Añadir">Añadir producto</button> 
-    <br><br>
+    <h1>Catálogo</h1>
+    
+    <div style="text-align: center; margin-bottom: 20px;">
+        <button type="button" id="Añadir">Añadir producto</button> 
+    </div>
+    
     <form id="formularioAñadir" class="form_oculto">  <!-- Formulario oculto -->
         <label for="id">Id: </label>
-        <input type="number" id="id" min="0" name="id"> <span class="error" id="idError"></span class="error">
-        <br><br>
+        <input type="number" id="id" min="0" name="id" placeholder="Ej: 101"> 
+        <span class="error" id="idError"></span>
+        
         <label for="name">Nombre del producto: </label>
-        <input type="text" id="name" name="name"> <span class="error" id="nameError"></span class="error">
-        <br><br>
-        <label for="desc">Descripcion breve: </label>
-        <textarea id="desc" name="desc"></textarea>
-        <br><br>
-        <label for="precio">Precio: </label>
-        <input type="number" id="precio" name="precio"> <span class="error" id="precioError"></span class="error">
-        <br><br>
-        <label for="imagen">Selecciona una imagen:</label>
-        <input type="file" id="imagen" name="imagen" accept="image/*"> <span class="error" id="imagenError"></span>
-        <br><br> 
+        <input type="text" id="name" name="name" placeholder="Ej: Monitor LED"> 
+        <span class="error" id="nameError"></span>
+        
+        <label for="desc">Descripción breve: </label>
+        <textarea id="desc" name="desc" placeholder="Detalles del producto..."></textarea>
+        
+        <label for="precio">Precio (€): </label>
+        <input type="number" id="precio" name="precio" placeholder="0.00"> 
+        <span class="error" id="precioError"></span>
+        
+        <label for="imagen">URL de la imagen:</label>
+        <input type="text" id="imagen" name="imagen" placeholder="https://..."> 
+        <span class="error" id="imagenError"></span>
+        <br>
 
-        <span id="mensaje"></span> 
-        <br><br>
-
+        <span id="mensaje" style="display:block; margin-top:10px; font-weight:bold;"></span> 
+        <br>
         <button type="submit" id="añadirProducto">Añadir</button>
     </form>
-    <br><br><br>
+    
     <div id="productos" class="productos"></div>
-    <br><br><br>
+    
     <div id="contador"></div>
 
-    <script src="API.js"></script>
     <script src="script.js"></script>  <!-- Hoja JS -->
 </body>
 </html>

@@ -1,28 +1,129 @@
-.error { color: red; }  /* Mensajes de error en color rojo */
-
-.form_oculto {  /* Formulario permanece oculto hasta que le des al boton */
-    width: 100%;
-    visibility: hidden;
-    /* Animacion */
-    opacity: 0;
-    transform: translateY(-20px);  /* Despaza desde mas arriba para dar la sensacion de desplazamiento */
-    transition: opacity .5s ease, transform .5s ease, visibility .5s;
+:root  {  /* Paleta de colores */
+    --gris-fondo: #1e1e1e;
+    --gris-oscuro: #2a2a2a;
+    --gris-medio: #3a3a3a;
+    --gris-borde: #444;
+    --gris-texto: #e5e5e5;
+    --aqua: #2ec4c6;
+    --aqua-hover: #26aeb0;
+    
+    --error-bg: #ffe6e6;
+    --error-border: #ff4d4d;
+    --error-text: #8a0000;
 }
 
-.form_oculto.visible {  /* Animacion de aparicion del formulario */
+body  {
+    font-family: Arial, sans-serif;
+    background-color: var(--gris-fondo);
+    color: var(--gris-texto);
+    margin: 0;
+    padding: 20px;
+}
+
+h1  {
+    color: var(--aqua);
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 50px;
+}
+
+button  {
+    background-color: var(--aqua);
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color .3s ease, transform .2s ease;
+}
+
+button:hover  {
+    background-color: var(--aqua-hover);
+    transform: translateY(-1px);
+}
+
+button:disabled  {
+    background-color: var(--gris-medio);
+    cursor: not-allowed;
+    transform: none;
+}
+
+form label  {
+    display: block;
+    margin-top: 12px;
+    font-weight: 600;
+}
+
+form input, form textarea  {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 4px;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: #242424;
+    color: var(--gris-texto);
+    border: 1px solid var(--gris-borde);
+    font-size: 0.95rem;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+form input:focus, form textarea:focus  {
+    outline: none;
+    border-color: var(--aqua);
+    box-shadow: 0 0 0 2px rgba(46,196,198,.3);
+}
+
+.form_oculto  {  /* Formulario permanece oculto hasta que le des al boton */
+    max-height: 0;
+    overflow: hidden;
+    background-color: var(--gris-oscuro);
+    border-radius: 12px;
+    padding: 0 20px;
+    border: 1px solid var(--gris-borde);
+    margin: 0 auto 20px;
+    max-width: 500px;
     /* Animacion */
-    visibility: visible;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: max-height .5s ease, opacity .4s ease, transform .4s ease, padding .4s ease;
+}
+
+.form_oculto.visible  {  /* Animacion de aparicion del formulario */
+    padding: 20px;
+    /* Animacion */
+    max-height: 800px;
     opacity: 1;
     transform: translateY(0);
 }
 
-.productos {  /* Contenedor de los productos */
-    display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));  /* Los organiza automaticamente en columnas */
-    gap: 20px;
+.error  {  /* Mensaje de error en otro color */
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    display: block;
+    margin-top: 4px;
+    height: 18px;
 }
 
-.card {  /* Productos */
+.input-error  {  /* Cambia el color del input */
+    background-color: var(--error-bg) !important;
+    border: 1px solid var(--error-border) !important;
+    color: var(--error-text) !important;
+    font-weight: 500;
+}
+
+.input-error::placeholder  {  /* Cambia el color del texto para que se vea mejor */
+    color: #cc8888;
+}
+.productos  {  /* Contenedor de los productos */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));  /* Los organiza automaticamente en columnas */
+    gap: 24px;
+    justify-items: center;
+    margin-top: 30px;
+}
+
+.card  {  /* Productos */
     width: 250px; 
     display: flex; 
     flex-direction: column;
@@ -30,50 +131,74 @@
     transition: all .5s ease;
 }
 
-.card-top {  /* Mantine el nombre oculto */
+.card-top  {  /* Mantine el nombre oculto */
     height: 250px; 
     position: relative; 
     overflow: hidden; 
+    border-radius: 15px;
+    border: 4px solid var(--gris-oscuro);
+    box-sizing: border-box;
 }
 
-.img_producto {  /* Permite ver la imagen */
-    width: 250px;
-    height: 250px;
+.img_producto  {  /* Permite ver la imagen */
+    width: 100%; 
+    height: 100%;
     object-fit: cover;
+    display: block;
     /* Animacion *//* Transicion entre imagen y nombre */
     opacity: 1; 
     transform: scale(1);
     transition: opacity .5s ease, transform .5s ease;
 }
 
-.producto_oculto {  /* Nombre del producto */
+.producto_oculto  {  /* Nombre del producto */
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 40px;
+    box-sizing: border-box;      
+    background-color: var(--aqua); 
+    color: white;
+    font-weight: bold;
     text-align: center;
-    padding-top: 100px;
+    border-radius: 15px;
+    border: 4px solid var(--gris-oscuro);
     /* Animacion *//* Transicion entre imagen y nombre */
     opacity: 0;
-    transform: scale(1.1);
+    transform: scale(1.2);
     transition: opacity .5s ease, transform .5s ease;
 }
 
-.detalles_producto {  /* Detalles del producto */
-    padding: 10px;
+.detalles_producto  {  /* Detalles del producto */
+    padding: 0 10px;
     display: none;
+    background-color: #242424;
     /* Animacion */
     opacity: 0;
     transform: translateY(-10px);
-    transition: opacity .25s ease, transform .25s ease; 
+    transition: opacity .25s ease, transform .25s ease, padding .25s ease; 
 }
 
-.detalles_producto.activo {  /* Detalles del producto cuando esta desplegado */
+.detalles_producto.activo  {  /* Detalles del producto cuando esta desplegado */
+    display: block;
+    padding: 10px;
     /* Animacion */
     opacity: 1;
     transform: translateY(0);
 }
 
-.card.eliminando img {
-    filter: grayscale(100%) brightness(70%); 
+.card.eliminando img  {  /* Tranforma la imagen a una escala de grises cuando se elimina */
+    filter: grayscale(100%) brightness(70%);
     transition: filter .3s ease; 
+}
+
+#contador  {  /* Contador */
+    opacity: "0.5";
+    margin-top: 30px;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 40px;
 }
