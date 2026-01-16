@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mi Mapa Leaflet</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />  <!-- mapa -->
+    <style>
+        #map { height: 400px; width: 100%; }  /* Tamaño maximo del mapa */
+    </style>
+</head>
+<body>
+    <h1>Mapa</h1>
+    <div id="map"></div>
+
+    <div id="coordenadas">
+        <h3>Coordenadas actuales:</h3>
+        <div id="lat">Lat:</div><div id="lng">Lng:</div>
+    </div>
+
+    <h1>Puntos en el mapa</h1>
+    <canvas id="canvas" width="500;"></canvas>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>  <!-- mapa -->
+    <script src="script.js"></script>  <!-- scrip -->
+</body>
+</html>
